@@ -3,7 +3,7 @@ class LatLngCalculator < ApplicationService
 
   def initialize(api_key, zip_code)
     @zip_code = zip_code
-    @appid= '2fde67f4550d2c8a2ac06b8d11d3f092'
+    @appid= api_key
   end
 
   def call

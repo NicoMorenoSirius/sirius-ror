@@ -3,7 +3,7 @@
 class WeatherFetcher < ApplicationService
 
   def initialize(api_key, lat, lon)
-    @appid= '2fde67f4550d2c8a2ac06b8d11d3f092'
+    @appid = api_key
     @lat = lat
     @lon = lon
   end

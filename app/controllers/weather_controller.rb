@@ -2,15 +2,14 @@ class WeatherController < ApplicationController
   
   def index
     latLon = LatLngCalculator.call(
-      'test', 
+      Rails.application.config.open_weather_key, 
       params[:zip_code]
     )
-    result = WeatherFetcher.call(
-      'test',
+    render :json => WeatherFetcher.call(
+      Rails.application.config.open_weather_key,
       latLon['lat'],
       latLon['lon']
     )
-    render :json => result
   end
     
 end
