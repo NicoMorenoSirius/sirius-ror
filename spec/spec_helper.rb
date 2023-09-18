@@ -39,9 +39,9 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  config.before(:each) do
-    stub_request(:get, /api.openweathermap.org/).
-      to_return(status: 200, body: "stubbed response", headers: {})
+  config.before do
+    stub_request(:get, /api.openweathermap.org/)
+      .to_return(status: 200, body: 'stubbed response', headers: {})
   end
 
   # This option will default to `:apply_to_host_groups` in RSpec 4 (and will

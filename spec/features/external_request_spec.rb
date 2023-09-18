@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'capybara/rspec'
 
-feature 'External request' do
-  it 'Should stub the openweather request.' do
+describe 'External request' do
+  it 'stubs the openweather request.' do
     uri = URI('https://api.openweathermap.org/data/2.5/forecast')
 
     response = Net::HTTP.get(uri)
