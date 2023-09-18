@@ -59,7 +59,7 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   config.assets.quiet = true
 
-  config.open_weather_key = '2fde67f4550d2c8a2ac06b8d11d3f092'
+  config.open_weather_key = ENV['OPEN_WEATHER_KEY']
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
