@@ -2,10 +2,10 @@
 
 class WeatherFetcher < ApplicationService
 
-  def initialize(api_key, lat, lon)
+  attr_reader :zip_code, :appid
+  def initialize(api_key, zip_code)
     @appid = api_key
-    @lat = lat
-    @lon = lon
+    @zip_code = zip_code
   end
 
   def call
@@ -15,7 +15,11 @@ class WeatherFetcher < ApplicationService
   private
 
   def fetch_weather
-    options = { query: {lat: @lat, lon: @lon, appid: @appid, units: 'metric'}}
+    latLon = LatLngCalculator.call(
+      appid,
+      zip_code
+    )
+    options = { query: {lat: latLon['lat'], lon: latLon['lon'], appid: @appid, units: 'metric'}}
     HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
   end
 end
