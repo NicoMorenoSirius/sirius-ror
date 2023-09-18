@@ -15,11 +15,11 @@ class WeatherFetcher < ApplicationService
   private
 
     def fetch_weather
-      latLon = LatLngCalculator.call(
+      lat_lon = LatLngCalculator.call(
         appid,
         zip_code
       )
-      options = { query: { lat: latLon['lat'], lon: latLon['lon'], appid: @appid, units: 'metric' } }
+      options = { query: { lat: lat_lon['lat'], lon: lat_lon['lon'], appid: @appid, units: 'metric' } }
       HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
     end
 end

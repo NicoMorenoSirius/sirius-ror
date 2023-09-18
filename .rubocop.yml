@@ -6,6 +6,7 @@ require:
 AllCops:
   NewCops: enable
   Exclude:
+    - 'app/services/**/*'
     - db/**/*
     - bin/**
     - config/routes.rb
