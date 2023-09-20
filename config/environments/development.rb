@@ -61,6 +61,10 @@ Rails.application.configure do
 
   config.open_weather_key = ENV.fetch('OPEN_WEATHER_KEY', nil)
 
+  config.cache_store = :redis_cache_store, {
+    url: ENV.fetch('REDIS_URL', nil)
+  }
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

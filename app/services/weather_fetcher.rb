@@ -1,4 +1,4 @@
-# https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={API key}
+# https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&exclude={part}&appid={APIkey}
 
 class WeatherFetcher < ApplicationService
   attr_reader :zip_code, :appid
@@ -6,20 +6,30 @@ class WeatherFetcher < ApplicationService
   def initialize(api_key, zip_code)
     @appid = api_key
     @zip_code = zip_code
+    @redis_server = ActiveSupport::Cache::RedisCacheStore.new(namespace: 'weather-redis', expires_in: 30.minutes)
   end
 
   def call
-    fetch_weather
+    cached_weather = @redis_server.read("weather:#{zip_code}")
+    if cached_weather.present?
+      parsed_weather = JSON.parse(cached_weather)
+      parsed_weather['fetched_from_redis'] = true
+      return parsed_weather
+    else 
+      return fetch_weather
+    end
   end
 
   private
 
-    def fetch_weather
-      lat_lon = LatLngCalculator.call(
-        appid,
-        zip_code
-      )
-      options = { query: { lat: lat_lon['lat'], lon: lat_lon['lon'], appid: @appid, units: 'metric' } }
-      HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
-    end
+  def fetch_weather
+    lat_lon = LatLngCalculator.call(
+      appid,
+      zip_code
+    )
+    options = { query: { lat: lat_lon['lat'], lon: lat_lon['lon'], appid: @appid, units: 'metric' } }
+    weather = HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
+    @redis_server.write("weather:#{zip_code}", weather.to_json)
+    return weather
+  end
 end
