@@ -6,14 +6,13 @@ class WeatherFetcher < ApplicationService
   def initialize(api_key, zip_code)
     @appid = api_key
     @zip_code = zip_code
-    @redis_server = ActiveSupport::Cache::RedisCacheStore.new(namespace: 'weather-redis', expires_in: 30.minutes)
   end
 
   def call
-    cached_weather = @redis_server.read("weather:#{zip_code}")
+    cached_weather = Rails.cache.read("weather:#{zip_code}")
     if cached_weather.present?
       parsed_weather = JSON.parse(cached_weather)
-      parsed_weather['fetched_from_redis'] = true
+      parsed_weather['fetched_from_cache'] = true
       return parsed_weather
     else 
       return fetch_weather
@@ -29,7 +28,7 @@ class WeatherFetcher < ApplicationService
     )
     options = { query: { lat: lat_lon['lat'], lon: lat_lon['lon'], appid: @appid, units: 'metric' } }
     weather = HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
-    @redis_server.write("weather:#{zip_code}", weather.to_json)
+    Rails.cache.write("weather:#{zip_code}", weather.to_json, expires_in: 30.minute)
     return weather
   end
 end
