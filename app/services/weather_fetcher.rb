@@ -6,17 +6,17 @@ class WeatherFetcher < ApplicationService
   def initialize(api_key, zip_code)
     @appid = api_key
     @zip_code = zip_code
-    @redis_server = ActiveSupport::Cache::RedisCacheStore.new(namespace: 'redis', expires_in: 30.minutes)
+    @redis_server = ActiveSupport::Cache::RedisCacheStore.new(namespace: 'weather-redis', expires_in: 30.minutes)
   end
 
   def call
     cached_weather = @redis_server.read("weather:#{zip_code}")
-    if cached_weather.present? 
-      # cant handle this parsed object as a common object so I cant add an attribute
+    if cached_weather.present?
       parsed_weather = JSON.parse(cached_weather)
+      parsed_weather['fetched_from_redis'] = true
       return parsed_weather
     else 
-      return fetch_weather 
+      return fetch_weather
     end
   end
 
