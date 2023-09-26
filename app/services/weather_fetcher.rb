@@ -28,7 +28,7 @@ class WeatherFetcher < ApplicationService
     )
     options = { query: { lat: lat_lon['lat'], lon: lat_lon['lon'], appid: @appid, units: 'metric' } }
     weather = HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
-    Rails.cache.write("weather:#{zip_code}", weather.to_json, expires_in: 30.minute)
+    Rails.cache.write("weather:#{zip_code}", weather.to_json, expires_in: 30.minutes)
     return weather
   end
 end
