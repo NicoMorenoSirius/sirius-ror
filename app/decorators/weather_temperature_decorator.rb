@@ -19,13 +19,13 @@ class WeatherTemperatureDecorator < SimpleDelegator
     __getobj__['temp_max']
   end
 
-  def to_json
+  def to_json(*_args)
     {
-      pressure: pressure,
-      humidity: humidity,
-      temperature: temperature,
-      min_temperature: min_temperature,
-      max_temperature: max_temperature
+      pressure:,
+      humidity:,
+      temperature:,
+      min_temperature:,
+      max_temperature:
     }
   end
 end

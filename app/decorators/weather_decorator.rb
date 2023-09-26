@@ -15,12 +15,11 @@ class WeatherDecorator < SimpleDelegator
     WeatherTemperatureDecorator.new(__getobj__['list'][0]['main']).to_json
   end
 
-  def to_json
+  def to_json(*_args)
     {
-      location: location,
-      weather: weather,
-      from_cache: from_cache,
+      location:,
+      weather:,
+      from_cache:
     }
   end
-
 end
