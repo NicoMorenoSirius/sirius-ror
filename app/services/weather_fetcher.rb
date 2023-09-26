@@ -11,11 +11,9 @@ class WeatherFetcher < ApplicationService
   def call
     cached_weather = Rails.cache.read("weather:#{zip_code}")
     if cached_weather.present?
-      parsed_weather = JSON.parse(cached_weather)
-      parsed_weather['fetched_from_cache'] = true
-      return parsed_weather
+      return WeatherDecorator.new(JSON.parse(cached_weather), true).to_json
     else 
-      return fetch_weather
+      return WeatherDecorator.new(fetch_weather, false).to_json
     end
   end
 
@@ -26,6 +24,7 @@ class WeatherFetcher < ApplicationService
       appid,
       zip_code
     )
+    pp lat_lon
     options = { query: { lat: lat_lon['lat'], lon: lat_lon['lon'], appid: @appid, units: 'metric' } }
     weather = HTTParty.get('https://api.openweathermap.org/data/2.5/forecast', options)
     Rails.cache.write("weather:#{zip_code}", weather.to_json, expires_in: 30.minutes)
