@@ -39,8 +39,10 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  # TODO should here put real apikey to test?
   config.before do
     stub_request(:get, /api.openweathermap.org/)
+      .with(query: hash_including({appid: 'mockedApiKey'}))
       .to_return(status: 200, body: 'stubbed response', headers: {})
   end
 
