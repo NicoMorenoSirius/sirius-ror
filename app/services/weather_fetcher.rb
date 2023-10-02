@@ -11,11 +11,9 @@ class WeatherFetcher < ApplicationService
   def call
     cached_weather = Rails.cache.read("weather:#{zip_code}")
     if cached_weather.present?
-      parsed_weather = JSON.parse(cached_weather)
-      parsed_weather['fetched_from_cache'] = true
-      return parsed_weather
+      return WeatherDecorator.new(JSON.parse(cached_weather), true).to_json
     else 
-      return fetch_weather
+      return WeatherDecorator.new(fetch_weather, false).to_json
     end
   end
 
