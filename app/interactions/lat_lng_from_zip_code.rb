@@ -3,7 +3,7 @@ class LatLngFromZipCode < ActiveInteraction::Base
   string :appid, presence: true
 
   def execute
-    lat_lng_decorated = LatLngDecorator.new(HTTParty.get('http://api.openweathermap.org/geo/1.0/zip', options))
+    LatLngDecorator.new(HTTParty.get('http://api.openweathermap.org/geo/1.0/zip', options))
   end
 
   private
