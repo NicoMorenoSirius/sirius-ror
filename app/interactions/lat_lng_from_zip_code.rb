@@ -8,11 +8,11 @@ class LatLngFromZipCode < ActiveInteraction::Base
 
   private
 
-  def zip_code_country
-    "#{zip_code},us"
-  end
+    def zip_code_country
+      "#{zip_code},us"
+    end
 
-  def options
-    { query: { appid: appid, zip: zip_code_country }}
-  end
+    def options
+      { query: { appid:, zip: zip_code_country } }
+    end
 end
