@@ -1,6 +1,6 @@
 class LatLngFromZipCode < ActiveInteraction::Base
   string :zip_code, presence: true, desc: 'US zip code'
-  string :appid, presence: true, default: Rails.application.config.open_weather_key
+  string :appid, default: Rails.application.config.open_weather_key
 
   def execute
     LatLngDecorator.new(HTTParty.get('http://api.openweathermap.org/geo/1.0/zip', options))
