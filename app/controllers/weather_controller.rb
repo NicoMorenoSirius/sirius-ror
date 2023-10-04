@@ -5,4 +5,11 @@ class WeatherController < ApplicationController
       params[:zip_code]
     )
   end
+
+  def with_interactions
+    outcome = WeatherInteraction.run({
+                                       zip_code: params[:zip_code]
+                                     })
+    render json: outcome.valid? ? outcome.result : 'throw error'
+  end
 end
