@@ -8,8 +8,7 @@ class WeatherController < ApplicationController
 
   def with_interactions
     outcome = WeatherInteraction.run({
-                                       zip_code: params[:zip_code],
-                                       appid: Rails.application.config.open_weather_key
+                                       zip_code: params[:zip_code]
                                      })
     render json: outcome.valid? ? outcome.result : 'throw error'
   end
